@@ -40,50 +40,30 @@ export class LoginForm {
   });
 
   onSubmit() {
-    if (this.loginForm.valid && this.loginForm.get('password')?.valid) {
+    if (this.loginForm.valid) {
       this.message.set('');
 
-      const password = this.loginForm.get('password')?.value || '';
+      const formValue = {
+        password: this.loginForm.get('password')?.value || '',
+        login: this.loginForm.get('login')?.value || '',
+      };
 
-      if (!this.isPasswordValid(password)) {
-        this.message.set('Пароль не соответствует требованиям безопасности');
-        return;
-      }
-
-      this.loginService
-        .login({
-          password: password,
-          login: this.loginForm.get('login')?.value || '',
-        })
-        .subscribe({
-          next: (response) => {
-            this.message.set(response.message);
-          },
-          error: (error) => {
-            const errorMessage =
-              error?.error?.message ||
-              error?.error?.error ||
-              error?.message ||
-              'Произошла ошибка при входе';
-            this.message.set(errorMessage);
-            console.error('Login error:', error);
-          },
-        });
-    } else {
-      Object.keys(this.loginForm.controls).forEach((key) => {
-        this.loginForm.get(key)?.markAsTouched();
+      this.loginService.login(formValue).subscribe({
+        next: (response) => {
+          this.message.set(response.message);
+        },
+        error: (error) => {
+          this.message.set(this.loginService.getLoginErrorMessage(error));
+        },
       });
+    } else {
+      this.markFormFieldsAsTouched();
     }
   }
 
-  private isPasswordValid(password: string): boolean {
-    if (!password) return false;
-
-    const hasLowercase = /[a-z]/.test(password);
-    const hasUppercase = /[A-Z]/.test(password);
-    const hasDigit = /[0-9]/.test(password);
-    const hasSpecial = /[@$!%*?&]/.test(password);
-
-    return hasLowercase && hasUppercase && hasDigit && hasSpecial && password.length >= 6;
+  private markFormFieldsAsTouched(): void {
+    Object.keys(this.loginForm.controls).forEach((key) => {
+      this.loginForm.get(key)?.markAsTouched();
+    });
   }
 }

@@ -69,55 +69,34 @@ export class SignInForm implements ISignInForm {
   );
 
   onSubmit() {
-    if (this.signInForm.valid && this.signInForm.get('password')?.valid) {
+    if (this.signInForm.valid) {
       this.message.set({ message: '', error: '' });
 
-      const password = this.signInForm.get('password')?.value || '';
+      const formValue = {
+        password: this.signInForm.get('password')?.value || '',
+        login: this.signInForm.get('login')?.value || '',
+        email: this.signInForm.get('email')?.value || '',
+      };
 
-      if (!this.isPasswordValid(password)) {
-        this.message.set({
-          message: '',
-          error: 'Пароль не соответствует требованиям безопасности',
-        });
-        return;
-      }
-
-      this.authService
-        .signIn({
-          password: password,
-          login: this.signInForm.get('login')?.value || '',
-          email: this.signInForm.get('email')?.value || '',
-        })
-        .subscribe({
-          next: (response) => {
-            this.message.set({ message: response.message, error: '' });
-          },
-          error: (error) => {
-            const errorMessage =
-              error?.error?.message ||
-              error?.error?.error ||
-              error?.message ||
-              'Произошла ошибка при регистрации';
-            this.message.set({ message: '', error: errorMessage });
-            console.error('Sign in error:', error);
-          },
-        });
-    } else {
-      // Если форма невалидна, помечаем все поля как touched для отображения ошибок
-      Object.keys(this.signInForm.controls).forEach((key) => {
-        this.signInForm.get(key)?.markAsTouched();
+      this.authService.signIn(formValue).subscribe({
+        next: (response) => {
+          this.message.set({ message: response.message, error: '' });
+        },
+        error: (error) => {
+          this.message.set({
+            message: '',
+            error: this.authService.getSignInErrorMessage(error),
+          });
+        },
       });
+    } else {
+      this.markFormFieldsAsTouched();
     }
   }
 
-  private isPasswordValid(password: string): boolean {
-    if (!password) return false;
-
-    const hasLowercase = /[a-z]/.test(password);
-    const hasUppercase = /[A-Z]/.test(password);
-    const hasDigit = /[0-9]/.test(password);
-    const hasSpecial = /[@$!%*?&]/.test(password);
-
-    return hasLowercase && hasUppercase && hasDigit && hasSpecial && password.length >= 6;
+  private markFormFieldsAsTouched(): void {
+    Object.keys(this.signInForm.controls).forEach((key) => {
+      this.signInForm.get(key)?.markAsTouched();
+    });
   }
 }
