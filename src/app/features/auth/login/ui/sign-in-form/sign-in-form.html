@@ -1,0 +1,99 @@
+<div class="sign-in-form-container">
+  <div class="form-header">
+    <h1>Регистрация</h1>
+    <p>Создайте аккаунт, чтобы начать работу</p>
+  </div>
+
+  <form [formGroup]="signInForm" (ngSubmit)="onSubmit()" class="sign-in-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Логин</mat-label>
+      <input matInput type="text" formControlName="login" placeholder="example@mail.com" />
+      @if (signInForm.get('login')?.hasError('required') && signInForm.get('login')?.touched) {
+        <mat-error>Логин обязателен</mat-error>
+      }
+      @if (signInForm.get('login')?.hasError('login') && signInForm.get('login')?.touched) {
+        <mat-error>Введите корректный логин</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="example@mail.com" />
+      @if (signInForm.get('email')?.hasError('required') && signInForm.get('email')?.touched) {
+        <mat-error>Email обязателен</mat-error>
+      }
+      @if (signInForm.get('email')?.hasError('email') && signInForm.get('email')?.touched) {
+        <mat-error>Введите корректный email</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Пароль</mat-label>
+      <input matInput type="password" formControlName="password" />
+      @if (
+        signInForm.get('password')?.hasError('required') && signInForm.get('password')?.touched
+      ) {
+        <mat-error>Пароль обязателен</mat-error>
+      }
+      @if (
+        signInForm.get('password')?.hasError('minlength') && signInForm.get('password')?.touched
+      ) {
+        <mat-error>Пароль должен быть не менее 6 символов</mat-error>
+      }
+      @if (
+        signInForm.get('password')?.hasError('passwordLowercase') &&
+        signInForm.get('password')?.touched
+      ) {
+        <mat-error>Пароль должен содержать хотя бы одну строчную букву</mat-error>
+      }
+      @if (
+        signInForm.get('password')?.hasError('passwordUppercase') &&
+        signInForm.get('password')?.touched
+      ) {
+        <mat-error>Пароль должен содержать хотя бы одну заглавную букву</mat-error>
+      }
+      @if (
+        signInForm.get('password')?.hasError('passwordDigit') && signInForm.get('password')?.touched
+      ) {
+        <mat-error>Пароль должен содержать хотя бы одну цифру</mat-error>
+      }
+      @if (
+        signInForm.get('password')?.hasError('passwordSpecial') &&
+        signInForm.get('password')?.touched
+      ) {
+        <mat-error>Пароль должен содержать хотя бы один специальный символ (@$!%*?&)</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Подтвердите пароль</mat-label>
+      <input matInput type="password" formControlName="confirmPassword" />
+      @if (
+        signInForm.get('confirmPassword')?.hasError('required') &&
+        signInForm.get('confirmPassword')?.touched
+      ) {
+        <mat-error>Подтверждение пароля обязательно</mat-error>
+      }
+      @if (signInForm.hasError('passwordMismatch') && signInForm.get('confirmPassword')?.touched) {
+        <mat-error>Пароли не совпадают</mat-error>
+      }
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="signInForm.invalid"
+      class="full-width submit-button"
+    >
+      Зарегистрироваться
+    </button>
+
+    @if (message().error) {
+      <div class="error-message">{{ message().error }}</div>
+    }
+    @if (message().message) {
+      <div class="success-message">{{ message().message }}</div>
+    }
+  </form>
+</div>
