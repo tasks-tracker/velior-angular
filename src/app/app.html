@@ -1,1 +1,7 @@
-<router-outlet />
+@if (userService.isLoading()) {
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  <router-outlet></router-outlet>
+}
