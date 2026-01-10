@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { AuthService } from '@app/features/auth/login/model/auth.service';
 import { passwordValidator } from '@shared/lib/password-validator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -22,13 +23,12 @@ import { passwordValidator } from '@shared/lib/password-validator';
 })
 export class LoginForm {
   protected readonly message = signal<string>('');
-
+  private readonly router = inject(Router);
   private readonly loginService = inject(AuthService);
 
   loginForm = new FormGroup({
     login: new FormControl('', [
       Validators.required,
-      Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
       Validators.minLength(3),
       Validators.maxLength(255),
     ]),
@@ -51,6 +51,7 @@ export class LoginForm {
       this.loginService.login(formValue).subscribe({
         next: (response) => {
           this.message.set(response.message);
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.message.set(this.loginService.getLoginErrorMessage(error));

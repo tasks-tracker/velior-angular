@@ -5,8 +5,8 @@
   <mat-card-content>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="login" placeholder="example@mail.com" />
+        <mat-label>Логин</mat-label>
+        <input matInput type="text" formControlName="login" placeholder="example" />
         @if (loginForm.get('login')?.hasError('required') && loginForm.get('login')?.touched) {
           <mat-error>Логин обязателен</mat-error>
         }
