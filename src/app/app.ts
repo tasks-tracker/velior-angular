@@ -16,9 +16,7 @@ export class App implements OnInit {
   constructor() {
     effect(() => {
       const error = this.userService.error();
-      console.log(error);
       if (error) {
-        console.log('navigate to login');
         this.router.navigate(['/login']);
       }
 

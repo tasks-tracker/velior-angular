@@ -1,0 +1,23 @@
+<div class="conversations-container">
+  <app-search></app-search>
+  <mat-nav-list class="conversations-list">
+    <mat-list-item 
+      *ngFor="let conversation of conversations" 
+      class="conversation-item"
+      [class.active]="selectedConversationId === conversation.id"
+      (click)="selectConversation(conversation.id)">
+      <div matListItemAvatar class="conversation-avatar">
+        {{ conversation.avatar }}
+      </div>
+      <div matListItemTitle class="conversation-name">
+        {{ conversation.name }}
+      </div>
+      <div matListItemLine class="conversation-preview">
+        {{ conversation.preview }}
+      </div>
+      <div matListItemMeta class="conversation-time">
+        {{ conversation.time }}
+      </div>
+    </mat-list-item>
+  </mat-nav-list>
+</div>
