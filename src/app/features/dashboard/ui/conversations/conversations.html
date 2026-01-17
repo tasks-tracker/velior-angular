@@ -1,23 +1,38 @@
 <div class="conversations-container">
-  <app-search></app-search>
-  <mat-nav-list class="conversations-list">
-    <mat-list-item 
-      *ngFor="let conversation of conversations" 
-      class="conversation-item"
-      [class.active]="selectedConversationId === conversation.id"
-      (click)="selectConversation(conversation.id)">
-      <div matListItemAvatar class="conversation-avatar">
-        {{ conversation.avatar }}
-      </div>
-      <div matListItemTitle class="conversation-name">
-        {{ conversation.name }}
-      </div>
-      <div matListItemLine class="conversation-preview">
-        {{ conversation.preview }}
-      </div>
-      <div matListItemMeta class="conversation-time">
-        {{ conversation.time }}
-      </div>
-    </mat-list-item>
-  </mat-nav-list>
+  <mat-tab-group class="conversations-tabs">
+    <mat-tab label="Беседы">
+      <mat-nav-list class="conversations-list">
+    @if (isLoading) {
+      <div>Загрузка...</div>
+    } @else if (error) {
+      <div>{{ error }}</div>
+    } @else {
+      @for (conversation of conversations; track conversation.conversationId) {
+        <mat-list-item class="conversation-item">
+          <div matListItemAvatar class="conversation-avatar">
+            @if (conversation.settings.avatarUrl) {
+              <img [src]="conversation.settings.avatarUrl" [alt]="conversation.userName" class="avatar-image" />
+            } @else {
+              <div class="avatar-initials">{{ getInitials(conversation.userName) }}</div>
+            }
+          </div>
+          <div matListItemTitle class="conversation-name">
+            {{ conversation.userName }}
+          </div>
+          <div matListItemLine class="conversation-preview">
+            {{ conversation.lastMessage | cutText: 50 }}
+          </div>
+          <div matListItemMeta class="conversation-time">
+            {{ conversation.lastMessageAt | date: 'dd.MM.yyyy HH:mm' }}
+          </div>
+        </mat-list-item>
+      }
+    }
+      </mat-nav-list>
+    </mat-tab>
+    
+    <mat-tab label="Поиск">
+      <app-search></app-search>
+    </mat-tab>
+  </mat-tab-group>
 </div>

@@ -1,44 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Search } from '../search/search';
 import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
-
-interface Conversation {
-  id: number;
-  name: string;
-  preview: string;
-  time: string;
-  avatar: string;
-}
+import { ConversationsService } from '../../model/conversations.service';
+import { CutTextPipe } from '@app/shared/lib/pipes/cut-text-pipe';
 
 @Component({
   selector: 'app-conversations',
-  imports: [Search, MatListModule, CommonModule],
+  imports: [Search, MatListModule, MatTabsModule, CommonModule, CutTextPipe],
   templateUrl: './conversations.html',
   standalone: true,
   styleUrl: './conversations.scss',
 })
-export class Conversations {
-  selectedConversationId: number | null = null;
+export class Conversations implements OnInit {
+  protected readonly conversationsService = inject(ConversationsService);
+  
+  ngOnInit(): void {
+    this.conversationsService.getConversations().subscribe();
+  }
+  
+  protected get conversations() {
+    return this.conversationsService.conversations();
+  }
+  
+  protected get isLoading() {
+    return this.conversationsService.isLoading();
+  }
+  
+  protected get error() {
+    return this.conversationsService.error();
+  }
 
-  conversations: Conversation[] = [
-    {
-      id: 1,
-      name: 'Пользователь 1',
-      preview: 'Последнее сообщение...',
-      time: '12:30',
-      avatar: 'U'
-    },
-    {
-      id: 2,
-      name: 'Пользователь 2',
-      preview: 'Другое сообщение...',
-      time: '11:15',
-      avatar: 'U'
+  protected getInitials(name: string): string {
+    if (!name) return '';
+    const parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
     }
-  ];
-
-  selectConversation(id: number) {
-    this.selectedConversationId = id;
+    return name.substring(0, 2).toUpperCase();
   }
 }
