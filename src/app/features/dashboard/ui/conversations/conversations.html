@@ -2,35 +2,18 @@
   <mat-tab-group class="conversations-tabs">
     <mat-tab label="Беседы">
       <mat-nav-list class="conversations-list">
-    @if (isLoading) {
-      <div>Загрузка...</div>
-    } @else if (error) {
-      <div>{{ error }}</div>
-    } @else {
-      @for (conversation of conversations; track conversation.conversationId) {
-        <mat-list-item class="conversation-item">
-          <div matListItemAvatar class="conversation-avatar">
-            @if (conversation.settings.avatarUrl) {
-              <img [src]="conversation.settings.avatarUrl" [alt]="conversation.userName" class="avatar-image" />
-            } @else {
-              <div class="avatar-initials">{{ getInitials(conversation.userName) }}</div>
-            }
-          </div>
-          <div matListItemTitle class="conversation-name">
-            {{ conversation.userName }}
-          </div>
-          <div matListItemLine class="conversation-preview">
-            {{ conversation.lastMessage | cutText: 50 }}
-          </div>
-          <div matListItemMeta class="conversation-time">
-            {{ conversation.lastMessageAt | date: 'dd.MM.yyyy HH:mm' }}
-          </div>
-        </mat-list-item>
-      }
-    }
+        @if (isLoading) {
+          <div>Загрузка...</div>
+        } @else if (error) {
+          <div>{{ error }}</div>
+        } @else {
+          @for (conversation of conversations; track conversation.conversationId) {
+            <app-user [data]="conversation" mode="conversation"></app-user>
+          }
+        }
       </mat-nav-list>
     </mat-tab>
-    
+
     <mat-tab label="Поиск">
       <app-search></app-search>
     </mat-tab>

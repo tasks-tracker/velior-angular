@@ -1,11 +1,7 @@
 {
-  // Prettier настройки
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "editor.formatOnPaste": false,
-  "editor.formatOnType": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   
-  // Настройки для конкретных файлов
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
@@ -35,15 +31,7 @@
     "editor.formatOnSave": true
   },
   
-  // Дополнительные настройки
-  "prettier.requireConfig": true,
-  "prettier.useEditorConfig": false,
-  
-  // Игнорировать файлы при форматировании
-  "files.exclude": {
-    "**/.git": true,
-    "**/.DS_Store": true,
-    "**/node_modules": true
-  }
+  "prettier.enable": true,
+  "prettier.requireConfig": false
 }
 

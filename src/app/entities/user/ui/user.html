@@ -1,1 +1,22 @@
-<p>user works!</p>
+<mat-list-item class="user-item">
+  <div matListItemAvatar class="conversation-avatar">
+    @if (avatarUrl) {
+      <img [src]="avatarUrl" [alt]="userName" class="avatar-image" />
+    } @else {
+      <div class="avatar-initials">{{ getInitials(userName) }}</div>
+    }
+  </div>
+  <div matListItemTitle class="conversation-name">
+    {{ userName }}
+  </div>
+  @if (mode === 'conversation' && lastMessage) {
+    <div matListItemLine class="conversation-preview">
+      {{ lastMessage | cutText: 50 }}
+    </div>
+  }
+  @if (mode === 'conversation' && lastMessageAt) {
+    <div matListItemMeta class="conversation-time">
+      {{ lastMessageAt | date: 'dd.MM.yyyy HH:mm' }}
+    </div>
+  }
+</mat-list-item>

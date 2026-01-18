@@ -7,16 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-chat',
-  imports: [
-    MatToolbarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule
-  ],
+  imports: [MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
   templateUrl: './chat.html',
   standalone: true,
   styleUrl: './chat.scss',
 })
-export class Chat {
-}
+export class Chat {}
