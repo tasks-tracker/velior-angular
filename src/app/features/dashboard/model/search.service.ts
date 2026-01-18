@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { API_URL } from '@app/shared/config/api.config';
-import { Observable, tap, catchError, of, throwError, finalize } from 'rxjs';
+import { tap, catchError, throwError, finalize } from 'rxjs';
 
 
 interface User {
@@ -15,12 +15,9 @@ interface User {
   }
   conversation_id: string;
 }
-
 interface SearchUsersResponse {
   users: User[]
 }
-
-
 
 @Injectable({
   providedIn: 'root',

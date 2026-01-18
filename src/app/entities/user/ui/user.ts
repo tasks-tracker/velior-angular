@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { CutTextPipe } from '@app/shared/lib/pipes/cut-text-pipe';
@@ -32,8 +32,10 @@ export interface SearchUserData {
   styleUrl: './user.scss',
 })
 export class User {
+  @Output() userClick = new EventEmitter<string>();
   @Input() data!: ConversationData | SearchUserData;
   @Input() mode: 'conversation' | 'search' = 'conversation';
+  @Input() isActive: boolean = false;
 
   protected get avatarUrl(): string {
     if (this.mode === 'conversation') {
@@ -61,6 +63,18 @@ export class User {
       return (this.data as ConversationData).lastMessageAt || null;
     }
     return null;
+  }
+
+  protected onClick(event: Event): void {
+    event.stopPropagation(); 
+    
+    if (this.mode === 'conversation') {
+      const conversationId = (this.data as ConversationData).conversationId;
+      this.userClick.emit(conversationId);
+    } else {
+      const userId = (this.data as SearchUserData).id;
+      this.userClick.emit(userId);
+    }
   }
 
   protected getInitials(name: string): string {

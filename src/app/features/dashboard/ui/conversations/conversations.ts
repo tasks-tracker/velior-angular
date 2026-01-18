@@ -5,6 +5,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { ConversationsService } from '../../model/conversations.service';
 import { User } from '@app/entities/user/ui/user';
+import { ChatService } from '../../model/chat.service';
 
 @Component({
   selector: 'app-conversations',
@@ -15,13 +16,23 @@ import { User } from '@app/entities/user/ui/user';
 })
 export class Conversations implements OnInit {
   protected readonly conversationsService = inject(ConversationsService);
+  protected readonly chatService = inject(ChatService);
 
   ngOnInit(): void {
     this.conversationsService.getConversations().subscribe();
   }
 
+  getMessages(event: string) {
+    this.chatService.getMessages(event).subscribe();
+  }
+
   protected get conversations() {
     return this.conversationsService.conversations();
+  }
+
+  protected isActive(conversationId: string): boolean {
+    const selectedId = this.chatService.selectedConversationId();
+    return selectedId === conversationId;
   }
 
   protected get isLoading() {
