@@ -60,4 +60,12 @@ export class ChatService {
       }),
     );
   }
+
+  sendMessage(message: {
+    conversationId: string;
+    senderId: string;
+    message: string;
+  }) {
+    return this.http.post(`${this.path}/send`, message)
+  }
 }

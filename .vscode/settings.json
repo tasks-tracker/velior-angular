@@ -1,6 +1,9 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never"
+  },
   
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -32,6 +35,5 @@
   },
   
   "prettier.enable": true,
-  "prettier.requireConfig": false
 }
 
