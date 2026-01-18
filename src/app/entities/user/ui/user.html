@@ -1,4 +1,4 @@
-<mat-list-item class="user-item">
+<mat-list-item class="user-item" [class.active]="isActive" (click)="onClick($event)">
   <div matListItemAvatar class="conversation-avatar">
     @if (avatarUrl) {
       <img [src]="avatarUrl" [alt]="userName" class="avatar-image" />

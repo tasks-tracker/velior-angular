@@ -4,10 +4,31 @@
   </mat-toolbar>
 
   <div class="chat-messages">
-    <div class="message-placeholder">
-      <mat-icon>chat_bubble_outline</mat-icon>
-      <p>Выберите беседу для начала переписки</p>
-    </div>
+    @if (messages && messages.length > 0) {
+      @for (message of messages; track message.id) {
+        <div class="message-item" [class.my-message]="isMyMessage(message.senderName)" [class.other-message]="!isMyMessage(message.senderName)">
+          <div class="message-content">
+            @if (!isMyMessage(message.senderName)) {
+              <div class="message-header">
+                <span class="message-sender">{{ message.senderName }}</span>
+                <span class="message-time">{{ message.createdAt | date: 'dd.MM.yyyy HH:mm' }}</span>
+              </div>
+            }
+            <div class="message-wrapper">
+              <div class="message-text">{{ message.content }}</div>
+              @if (isMyMessage(message.senderName)) {
+                <span class="message-time">{{ message.createdAt | date: 'dd.MM.yyyy HH:mm' }}</span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="message-placeholder">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <p>Выберите беседу для начала переписки</p>
+      </div>
+    }
   </div>
 
   <div class="chat-input">
