@@ -12,4 +12,3 @@ export const API_URL = new InjectionToken<string>('API_URL', {
     return process.env['API_URL'] || 'http://localhost:8000';
   },
 });
-

@@ -7,7 +7,7 @@
 .chat-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   box-shadow: none;
-  
+
   span {
     font-size: 16px;
     font-weight: 500;
@@ -28,7 +28,7 @@
   height: 100%;
   color: rgba(0, 0, 0, 0.6);
   font-size: 14px;
-  
+
   mat-icon {
     font-size: 64px;
     width: 64px;
@@ -36,7 +36,7 @@
     margin-bottom: 16px;
     opacity: 0.5;
   }
-  
+
   p {
     margin: 0;
   }
@@ -48,11 +48,11 @@
   padding: 12px 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   gap: 8px;
-  
+
   .input-field {
     flex: 1;
   }
-  
+
   .send-button {
     flex-shrink: 0;
   }

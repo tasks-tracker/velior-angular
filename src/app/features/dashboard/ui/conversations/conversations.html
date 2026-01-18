@@ -1,23 +1,21 @@
 <div class="conversations-container">
-  <app-search></app-search>
-  <mat-nav-list class="conversations-list">
-    <mat-list-item 
-      *ngFor="let conversation of conversations" 
-      class="conversation-item"
-      [class.active]="selectedConversationId === conversation.id"
-      (click)="selectConversation(conversation.id)">
-      <div matListItemAvatar class="conversation-avatar">
-        {{ conversation.avatar }}
-      </div>
-      <div matListItemTitle class="conversation-name">
-        {{ conversation.name }}
-      </div>
-      <div matListItemLine class="conversation-preview">
-        {{ conversation.preview }}
-      </div>
-      <div matListItemMeta class="conversation-time">
-        {{ conversation.time }}
-      </div>
-    </mat-list-item>
-  </mat-nav-list>
+  <mat-tab-group class="conversations-tabs">
+    <mat-tab label="Беседы">
+      <mat-nav-list class="conversations-list">
+        @if (isLoading) {
+          <div>Загрузка...</div>
+        } @else if (error) {
+          <div>{{ error }}</div>
+        } @else {
+          @for (conversation of conversations; track conversation.conversationId) {
+            <app-user [data]="conversation" mode="conversation"></app-user>
+          }
+        }
+      </mat-nav-list>
+    </mat-tab>
+
+    <mat-tab label="Поиск">
+      <app-search></app-search>
+    </mat-tab>
+  </mat-tab-group>
 </div>

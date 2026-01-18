@@ -9,5 +9,4 @@ import { Chat } from '../chat/chat';
   standalone: true,
   styleUrl: './dashboard.scss',
 })
-export class Dashboard {
-}
+export class Dashboard {}
