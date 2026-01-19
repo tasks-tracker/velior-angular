@@ -7,11 +7,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { ChatService } from '../../model/chat.service';
 import { UserService } from '@app/entities/user/model/user.service';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-chat',
-  imports: [MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, CommonModule, ReactiveFormsModule],
+  imports: [
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './chat.html',
   standalone: true,
   styleUrl: './chat.scss',
@@ -19,15 +27,15 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class Chat {
   protected readonly chatService = inject(ChatService);
   protected readonly userService = inject(UserService);
-  
-  messageValue = signal<string>('')
+
+  messageValue = signal<string>('');
 
   protected get messages() {
     return this.chatService.messages();
   }
 
   protected setMessageValue(value: string) {
-    this.messageValue.set(value)
+    this.messageValue.set(value);
   }
 
   protected handleSendMessage() {
@@ -35,13 +43,15 @@ export class Chat {
 
     if (message.trim() === '') return;
 
-    this.chatService.sendMessage({
-      conversationId: this.chatService.selectedConversationId() || '',
-      senderId: this.userService.user()?.id || '',
-      message: message,
-    }).subscribe()
+    this.chatService
+      .sendMessage({
+        conversationId: this.chatService.selectedConversationId() || '',
+        senderId: this.userService.user()?.id || '',
+        message: message,
+      })
+      .subscribe();
 
-    this.messageValue.set('')
+    this.messageValue.set('');
   }
 
   protected get currentUserLogin(): string | null {
