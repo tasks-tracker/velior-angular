@@ -25,7 +25,14 @@ export class Conversations implements OnInit {
   }
 
   getMessages(event: string) {
-    this.chatService.getMessages(event).subscribe();
+    this.chatService.getMessages(event).subscribe({
+      next: () => {
+        // Присоединяемся к беседе после успешной загрузки сообщений
+        if (this.socketService.isConnected()) {
+          this.socketService.joinConversation(event);
+        }
+      },
+    });
   }
 
   protected get conversations() {
@@ -34,9 +41,6 @@ export class Conversations implements OnInit {
 
   protected isActive(conversationId: string): boolean {
     const selectedId = this.chatService.selectedConversationId();
-    if (this.socketService.isConnected()) {
-      this.socketService.joinConversation(selectedId!);
-    }
     return selectedId === conversationId;
   }
 
