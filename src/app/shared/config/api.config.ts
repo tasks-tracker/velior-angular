@@ -7,8 +7,13 @@ import { InjectionToken } from '@angular/core';
 export const API_URL = new InjectionToken<string>('API_URL', {
   providedIn: 'root',
   factory: () => {
-    // Можно использовать environment переменные или другие источники
-    // Для продакшена можно читать из переменных окружения
-    return process.env['API_URL'] || 'http://localhost:8000';
+    return process?.env?.['API_URL'] || 'http://localhost:8000';
+  },
+});
+
+export const WS_URL = new InjectionToken<string>('WS_URL', {
+  providedIn: 'root',
+  factory: () => {
+    return 'http://localhost:8000';
   },
 });

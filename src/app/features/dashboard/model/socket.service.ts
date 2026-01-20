@@ -1,0 +1,168 @@
+import { inject, Injectable } from '@angular/core';
+import { WS_URL } from '@app/shared/config/api.config';
+import { Observable } from 'rxjs';
+import { io, Socket } from 'socket.io-client';
+
+export interface JoinConversation {
+  conversationId: string;
+}
+
+export interface MessagePayload {
+  message: string;
+  data: {
+    message: {
+      id: string;
+      conversationId: string;
+      senderId: string;
+      senderName: string;
+      content: string;
+      createdAt: Date | string;
+      updatedAt: Date | string;
+      settings: {
+        avatar_url: string;
+      };
+    };
+  };
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SocketService {
+  private socket: Socket | null = null;
+  private readonly wsUrl = inject(WS_URL);
+  private readonly chatUrl = `${this.wsUrl}/chat`;
+
+  /**
+   * Подключение к WebSocket
+   * @param sessionId - ID сессии пользователя
+   */
+  connect() {
+    if (this.socket?.connected) {
+      console.log('WebSocket already connected');
+      return;
+    }
+
+    this.socket = io(this.chatUrl, {
+      withCredentials: true,
+      transports: ['websocket', 'polling'],
+    });
+
+    this.socket.on('connect', () => {
+      console.log('Connected to WebSocket server:', this.socket?.id);
+    });
+  }
+
+  /**
+   * Публикация сообщения в беседу
+   */
+  sendMessage(payload: Record<string, any>) {
+    if (!this.socket?.connected) {
+      console.error('Socket not connected');
+      return;
+    }
+
+    this.socket.emit('message:send', payload);
+  }
+
+  /**
+   * Отключение от WebSocket
+   */
+  disconnect() {
+    if (this.socket?.connected) {
+      this.socket.disconnect();
+      console.log('WebSocket disconnected');
+    }
+  }
+
+  /**
+   * Присоединиться к беседе
+   */
+  joinConversation(conversationId: string) {
+    if (!this.socket?.connected) {
+      console.log('Not connected to WebSocket server');
+      return;
+    }
+
+    this.socket.emit('conversation:join', { conversationId });
+  }
+
+  /**
+   * Покинуть беседу
+   */
+  leaveConversation(conversationId: string): void {
+    if (!this.socket?.connected) {
+      return;
+    }
+
+    this.socket.emit('conversation:leave', { conversationId });
+  }
+
+  /**
+   * Слушать событие успешного присоединения к беседе
+   */
+  onConversationJoined(): Observable<{ conversationId: string }> {
+    return new Observable((observer) => {
+      if (!this.socket) {
+        observer.error('Not connected to WebSocket server');
+        return;
+      }
+
+      this.socket.on('conversation:joined', (data: { conversationId: string }) => {
+        observer.next(data);
+      });
+
+      return () => {
+        this.socket?.off('conversation:joined');
+      };
+    });
+  }
+
+  /**
+   * Слушать событие выхода из беседы
+   */
+  onConversationLeft(): Observable<{ conversationId: string }> {
+    return new Observable((observer) => {
+      if (!this.socket) {
+        observer.error('Socket not initialized');
+        return;
+      }
+
+      this.socket.on('conversation:left', (data) => {
+        observer.next(data);
+      });
+
+      return () => {
+        this.socket?.off('conversation:left');
+      };
+    });
+  }
+
+  /**
+   * Слушать событие нового сообщения
+   */
+  onNewMessage(): Observable<MessagePayload> {
+    return new Observable((observer) => {
+      if (!this.socket) {
+        observer.error('Socket not initialized');
+        return;
+      }
+
+      this.socket.on('message:new', (data: MessagePayload) => {
+        observer.next(data);
+      });
+
+      return () => {
+        this.socket?.off('message:new');
+      };
+    });
+  }
+
+  /**
+   * Проверить, подключен ли WebSocket
+   */
+
+  isConnected(): boolean {
+    return this.socket?.connected || false;
+  }
+}

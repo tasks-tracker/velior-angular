@@ -8,7 +8,12 @@
           <div>{{ error }}</div>
         } @else {
           @for (conversation of conversations; track conversation.conversationId) {
-            <app-user [data]="conversation" mode="conversation" [isActive]="isActive(conversation.conversationId)" (userClick)="getMessages($event)"></app-user>
+            <app-user
+              [data]="conversation"
+              mode="conversation"
+              [isActive]="isActive(conversation.conversationId)"
+              (userClick)="getMessages($event)"
+            ></app-user>
           }
         }
       </mat-nav-list>

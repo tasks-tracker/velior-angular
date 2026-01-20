@@ -66,8 +66,8 @@ export class User {
   }
 
   protected onClick(event: Event): void {
-    event.stopPropagation(); 
-    
+    event.stopPropagation();
+
     if (this.mode === 'conversation') {
       const conversationId = (this.data as ConversationData).conversationId;
       this.userClick.emit(conversationId);

@@ -1,4 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,27 +14,66 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { ChatService } from '../../model/chat.service';
 import { UserService } from '@app/entities/user/model/user.service';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { SocketService } from '../../model/socket.service';
 
 @Component({
   selector: 'app-chat',
-  imports: [MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, CommonModule, ReactiveFormsModule],
+  imports: [
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './chat.html',
   standalone: true,
   styleUrl: './chat.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Chat {
+export class Chat implements OnInit, OnDestroy {
   protected readonly chatService = inject(ChatService);
   protected readonly userService = inject(UserService);
-  
-  messageValue = signal<string>('')
+  private readonly socketService = inject(SocketService);
+  private subscriptions = new Subscription();
+
+  messageValue = signal<string>('');
+
+  ngOnInit(): void {
+    this.socketService.connect();
+    this.subscribeToEvents();
+  }
+
+  private subscribeToEvents(): void {
+    const joinedSubscription = this.socketService.onConversationJoined().subscribe((data) => {
+      console.log('Conversation joined:', data.conversationId);
+    });
+    this.subscriptions.add(joinedSubscription);
+
+    const messageSubscription = this.socketService.onNewMessage().subscribe((data) => {
+      this.chatService.addNewMessageFromSocket(data.data.message);
+    });
+    this.subscriptions.add(messageSubscription);
+  }
+
+  ngOnDestroy(): void {
+    if (this.chatService.selectedConversationId()) {
+      this.socketService.leaveConversation(this.chatService.selectedConversationId()!);
+    }
+    this.subscriptions.unsubscribe();
+    this.socketService.disconnect();
+  }
 
   protected get messages() {
+    console.log('Messages:', this.chatService.messages());
     return this.chatService.messages();
   }
 
   protected setMessageValue(value: string) {
-    this.messageValue.set(value)
+    this.messageValue.set(value);
   }
 
   protected handleSendMessage() {
@@ -35,13 +81,20 @@ export class Chat {
 
     if (message.trim() === '') return;
 
-    this.chatService.sendMessage({
-      conversationId: this.chatService.selectedConversationId() || '',
-      senderId: this.userService.user()?.id || '',
-      message: message,
-    }).subscribe()
+    this.chatService
+      .sendMessage({
+        conversationId: this.chatService.selectedConversationId() || '',
+        senderId: this.userService.user()?.id || '',
+        message: message,
+      })
+      .subscribe();
 
-    this.messageValue.set('')
+    this.socketService.sendMessage({
+      conversationId: this.chatService.selectedConversationId() || '',
+      message: message,
+    });
+
+    this.messageValue.set('');
   }
 
   protected get currentUserLogin(): string | null {
