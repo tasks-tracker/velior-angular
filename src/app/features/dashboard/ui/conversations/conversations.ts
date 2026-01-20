@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ConversationsService } from '../../model/conversations.service';
 import { User } from '@app/entities/user/ui/user';
 import { ChatService } from '../../model/chat.service';
+import { SocketService } from '../../model/socket.service';
 
 @Component({
   selector: 'app-conversations',
@@ -17,6 +18,7 @@ import { ChatService } from '../../model/chat.service';
 export class Conversations implements OnInit {
   protected readonly conversationsService = inject(ConversationsService);
   protected readonly chatService = inject(ChatService);
+  private readonly socketService = inject(SocketService);
 
   ngOnInit(): void {
     this.conversationsService.getConversations().subscribe();
@@ -32,6 +34,9 @@ export class Conversations implements OnInit {
 
   protected isActive(conversationId: string): boolean {
     const selectedId = this.chatService.selectedConversationId();
+    if (this.socketService.isConnected()) {
+      this.socketService.joinConversation(selectedId!);
+    }
     return selectedId === conversationId;
   }
 

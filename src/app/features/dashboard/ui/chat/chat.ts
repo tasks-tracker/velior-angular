@@ -1,4 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,14 +30,16 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './chat.html',
   standalone: true,
   styleUrl: './chat.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Chat {
+export class Chat implements OnInit, OnDestroy {
   protected readonly chatService = inject(ChatService);
   protected readonly userService = inject(UserService);
 
   messageValue = signal<string>('');
 
   protected get messages() {
+    console.log('Messages:', this.chatService.messages());
     return this.chatService.messages();
   }
 
