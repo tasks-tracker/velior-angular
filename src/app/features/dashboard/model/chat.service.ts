@@ -68,4 +68,47 @@ export class ChatService {
   sendMessage(message: { conversationId: string; senderId: string; message: string }) {
     return this.http.post(`${this.path}/send`, message);
   }
+
+  addNewMessageFromSocket(socketMessage: {
+    id: string;
+    conversationId: string;
+    senderId: string;
+    senderName: string;
+    content: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+    settings: {
+      avatar_url: string;
+    };
+  }) {
+    if (!socketMessage) {
+      return;
+    }
+
+    const formatDate = (date: Date | string): string => {
+      if (date instanceof Date) {
+        return date.toISOString();
+      }
+      return date;
+    };
+
+    const newMessage: Message = {
+      id: socketMessage.id,
+      conversationId: socketMessage.conversationId,
+      senderName: socketMessage.senderName,
+      content: socketMessage.content,
+      createdAt: formatDate(socketMessage.createdAt),
+      updateAt: formatDate(socketMessage.updatedAt),
+      settings: {
+        avatarUrl: socketMessage.settings.avatar_url,
+      },
+    };
+
+    this.messages.update((prev) => {
+      if (prev) {
+        return [...prev, newMessage];
+      }
+      return [newMessage];
+    });
+  }
 }

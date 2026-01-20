@@ -15,9 +15,20 @@ import { CommonModule } from '@angular/common';
 import { ChatService } from '../../model/chat.service';
 import { UserService } from '@app/entities/user/model/user.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { SocketService } from '../../model/socket.service';
 
 @Component({
   selector: 'app-chat',
+  imports: [
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    ReactiveFormsModule,
+  ],
   imports: [
     MatToolbarModule,
     MatFormFieldModule,
@@ -35,8 +46,35 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class Chat implements OnInit, OnDestroy {
   protected readonly chatService = inject(ChatService);
   protected readonly userService = inject(UserService);
+  private readonly socketService = inject(SocketService);
+  private subscriptions = new Subscription();
 
   messageValue = signal<string>('');
+
+  ngOnInit(): void {
+    this.socketService.connect();
+    this.subscribeToEvents();
+  }
+
+  private subscribeToEvents(): void {
+    const joinedSubscription = this.socketService.onConversationJoined().subscribe((data) => {
+      console.log('Conversation joined:', data.conversationId);
+    });
+    this.subscriptions.add(joinedSubscription);
+
+    const messageSubscription = this.socketService.onNewMessage().subscribe((data) => {
+      this.chatService.addNewMessageFromSocket(data.data.message);
+    });
+    this.subscriptions.add(messageSubscription);
+  }
+
+  ngOnDestroy(): void {
+    if (this.chatService.selectedConversationId()) {
+      this.socketService.leaveConversation(this.chatService.selectedConversationId()!);
+    }
+    this.subscriptions.unsubscribe();
+    this.socketService.disconnect();
+  }
 
   protected get messages() {
     console.log('Messages:', this.chatService.messages());
@@ -44,6 +82,7 @@ export class Chat implements OnInit, OnDestroy {
   }
 
   protected setMessageValue(value: string) {
+    this.messageValue.set(value);
     this.messageValue.set(value);
   }
 
@@ -60,6 +99,12 @@ export class Chat implements OnInit, OnDestroy {
       })
       .subscribe();
 
+    this.socketService.sendMessage({
+      conversationId: this.chatService.selectedConversationId() || '',
+      message: message,
+    });
+
+    this.messageValue.set('');
     this.messageValue.set('');
   }
 
