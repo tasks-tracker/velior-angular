@@ -2,7 +2,7 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll": "never"
+    "source.fixAll": "explicit"
   },
   
   "[typescript]": {
@@ -35,5 +35,16 @@
   },
   
   "prettier.enable": true,
+  "prettier.requireConfig": false,
+  "prettier.useEditorConfig": false,
+  "prettier.configPath": ".prettierrc",
+  
+  "eslint.enable": false,
+  "eslint.validate": [],
+  
+  "workbench.tree.indent": 15,
+  "workbench.tree.renderIndentGuides": "always",
+  "explorer.autoReveal": true,
+  "explorer.compactFolders": false,
+  "explorer.expandSingleFolder": true
 }
-
