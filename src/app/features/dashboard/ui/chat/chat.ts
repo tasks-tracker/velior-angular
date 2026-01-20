@@ -29,6 +29,15 @@ import { SocketService } from '../../model/socket.service';
     CommonModule,
     ReactiveFormsModule,
   ],
+  imports: [
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './chat.html',
   standalone: true,
   styleUrl: './chat.scss',
@@ -74,6 +83,7 @@ export class Chat implements OnInit, OnDestroy {
 
   protected setMessageValue(value: string) {
     this.messageValue.set(value);
+    this.messageValue.set(value);
   }
 
   protected handleSendMessage() {
@@ -94,6 +104,7 @@ export class Chat implements OnInit, OnDestroy {
       message: message,
     });
 
+    this.messageValue.set('');
     this.messageValue.set('');
   }
 

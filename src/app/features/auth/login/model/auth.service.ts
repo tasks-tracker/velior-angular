@@ -18,11 +18,6 @@ interface AuthResponse {
   message: string;
 }
 
-interface AuthError {
-  message?: string;
-  error?: string;
-}
-
 @Injectable()
 export class AuthService {
   private readonly http = inject(HttpClient);
