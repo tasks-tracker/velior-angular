@@ -1,11 +1,17 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
+import { provideRouter, Router } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { API_URL } from '@shared/config/api.config';
 import { authInterceptor } from '@shared/interceptors/auth.interceptor';
+import { UserService } from '@app/entities/user/model/user.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,5 +23,10 @@ export const appConfig: ApplicationConfig = {
       provide: API_URL,
       useValue: 'http://localhost:8000',
     },
+    provideAppInitializer(() => {
+      const userService = inject(UserService);
+
+      userService.me();
+    }),
   ],
 };
