@@ -1,6 +1,8 @@
 <div class="chat-container">
   <mat-toolbar class="chat-header">
-    <span>Переписка</span>
+    @if (conversationUser) {
+      <span>{{ conversationUser.userName }}</span>
+    }
   </mat-toolbar>
 
   <div class="chat-messages">

@@ -4,7 +4,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { ConversationsService } from '../../model/conversations.service';
-import { User } from '@app/entities/user/ui/user';
+import { ConversationData, User } from '@app/entities/user/ui/user';
 import { ChatService } from '../../model/chat.service';
 import { SocketService } from '../../model/socket.service';
 
@@ -27,12 +27,15 @@ export class Conversations implements OnInit {
   getMessages(event: string) {
     this.chatService.getMessages(event).subscribe({
       next: () => {
-        // Присоединяемся к беседе после успешной загрузки сообщений
         if (this.socketService.isConnected()) {
           this.socketService.joinConversation(event);
         }
       },
     });
+  }
+
+  setConversationUser(event: ConversationData) {
+    this.chatService.conversationUser.set(event);
   }
 
   protected get conversations() {

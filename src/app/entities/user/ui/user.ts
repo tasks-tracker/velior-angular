@@ -36,6 +36,7 @@ export class User {
   @Input() data!: ConversationData | SearchUserData;
   @Input() mode: 'conversation' | 'search' = 'conversation';
   @Input() isActive: boolean = false;
+  @Output() conversationUser = new EventEmitter<ConversationData>();
 
   protected get avatarUrl(): string {
     if (this.mode === 'conversation') {
@@ -70,6 +71,7 @@ export class User {
 
     if (this.mode === 'conversation') {
       const conversationId = (this.data as ConversationData).conversationId;
+      this.conversationUser.emit(this.data as ConversationData);
       this.userClick.emit(conversationId);
     } else {
       const userId = (this.data as SearchUserData).id;

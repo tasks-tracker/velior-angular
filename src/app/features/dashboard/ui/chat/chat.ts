@@ -47,6 +47,10 @@ export class Chat implements OnInit, OnDestroy {
     this.subscribeToEvents();
   }
 
+  protected get conversationUser() {
+    return this.chatService.conversationUser();
+  }
+
   private subscribeToEvents(): void {
     const joinedSubscription = this.socketService.onConversationJoined().subscribe((data) => {
       console.log('Conversation joined:', data.conversationId);
