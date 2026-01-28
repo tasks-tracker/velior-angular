@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { ConversationData, User } from '@app/entities/user/ui/user';
 import { API_URL } from '@app/shared/config/api.config';
 import { tap, catchError, throwError, finalize } from 'rxjs';
 
@@ -42,6 +43,7 @@ export class ChatService {
   readonly error = signal<string | null>(null);
   readonly isLoading = signal<boolean>(false);
   readonly selectedConversationId = signal<string | null>(null);
+  readonly conversationUser = signal<ConversationData | null>(null);
 
   getMessages(conversationId: string) {
     this.isLoading.set(true);

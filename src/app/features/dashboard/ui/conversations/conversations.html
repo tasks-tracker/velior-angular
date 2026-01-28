@@ -13,6 +13,7 @@
               mode="conversation"
               [isActive]="isActive(conversation.conversationId)"
               (userClick)="getMessages($event)"
+              (conversationUser)="setConversationUser(conversation)"
             ></app-user>
           }
         }
