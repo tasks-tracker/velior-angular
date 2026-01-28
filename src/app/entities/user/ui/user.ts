@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { CutTextPipe } from '@app/shared/lib/pipes/cut-text-pipe';
+import { UserAvatar } from './user-avatar/user-avatar';
 
-// Интерфейсы для разных типов данных
 export interface ConversationData {
   conversationId: string;
   userName: string;
@@ -26,7 +26,7 @@ export interface SearchUserData {
 
 @Component({
   selector: 'app-user',
-  imports: [MatListModule, CommonModule, CutTextPipe],
+  imports: [MatListModule, CommonModule, CutTextPipe, UserAvatar],
   templateUrl: './user.html',
   standalone: true,
   styleUrl: './user.scss',
@@ -77,14 +77,5 @@ export class User {
       const userId = (this.data as SearchUserData).id;
       this.userClick.emit(userId);
     }
-  }
-
-  protected getInitials(name: string): string {
-    if (!name) return '';
-    const parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
-    }
-    return name.substring(0, 2).toUpperCase();
   }
 }

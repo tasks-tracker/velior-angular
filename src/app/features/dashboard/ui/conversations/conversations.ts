@@ -7,10 +7,11 @@ import { ConversationsService } from '../../model/conversations.service';
 import { ConversationData, User } from '@app/entities/user/ui/user';
 import { ChatService } from '../../model/chat.service';
 import { SocketService } from '../../model/socket.service';
+import { UserBar } from '../user-bar/user-bar';
 
 @Component({
   selector: 'app-conversations',
-  imports: [Search, MatListModule, User, MatTabsModule, CommonModule],
+  imports: [Search, MatListModule, User, MatTabsModule, CommonModule, UserBar],
   templateUrl: './conversations.html',
   standalone: true,
   styleUrl: './conversations.scss',
