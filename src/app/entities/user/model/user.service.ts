@@ -7,6 +7,9 @@ export interface User {
   id: string;
   login: string;
   registeredAt: string;
+  settings: {
+    avatar_url: string;
+  };
 }
 
 @Injectable({
