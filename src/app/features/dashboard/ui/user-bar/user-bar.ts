@@ -21,7 +21,9 @@ export class UserBar {
     return this.userService.user();
   }
 
-  protected onSettings(): void {}
+  protected onSettings(): void {
+    this.router.navigate(['/settings']);
+  }
 
   protected onLogout(): void {
     this.userService.logout().subscribe({

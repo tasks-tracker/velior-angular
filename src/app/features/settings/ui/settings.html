@@ -1,0 +1,123 @@
+<div class="settings-container">
+  <mat-card>
+    <mat-card-header class="mat-card-header">
+      <mat-card-title>Настройки профиля</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="settings-form">
+        <div class="settings-form-fields">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Логин</mat-label>
+            <input matInput type="text" formControlName="login" placeholder="example" />
+            @if (
+              settingsForm.get('login')?.hasError('required') && settingsForm.get('login')?.touched
+            ) {
+              <mat-error>Логин обязателен</mat-error>
+            }
+            @if (
+              settingsForm.get('login')?.hasError('minlength') && settingsForm.get('login')?.touched
+            ) {
+              <mat-error>Логин не менее 3 символов</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="example@mail.com" />
+            @if (settingsForm.get('email')?.hasError('email') && settingsForm.get('email')?.touched) {
+              <mat-error>Введите корректный email</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Новый пароль</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="password"
+              placeholder="Оставьте пустым, если не меняете"
+            />
+            @if (
+              settingsForm.get('password')?.hasError('minlength') &&
+              settingsForm.get('password')?.touched &&
+              settingsForm.get('password')?.value
+            ) {
+              <mat-error>Пароль должен быть не менее 6 символов</mat-error>
+            }
+            @if (
+              settingsForm.get('password')?.hasError('passwordLowercase') &&
+              settingsForm.get('password')?.touched
+            ) {
+              <mat-error>Пароль должен содержать хотя бы одну строчную букву</mat-error>
+            }
+            @if (
+              settingsForm.get('password')?.hasError('passwordUppercase') &&
+              settingsForm.get('password')?.touched
+            ) {
+              <mat-error>Пароль должен содержать хотя бы одну заглавную букву</mat-error>
+            }
+            @if (
+              settingsForm.get('password')?.hasError('passwordDigit') &&
+              settingsForm.get('password')?.touched
+            ) {
+              <mat-error>Пароль должен содержать хотя бы одну цифру</mat-error>
+            }
+            @if (
+              settingsForm.get('password')?.hasError('passwordSpecial') &&
+              settingsForm.get('password')?.touched
+            ) {
+              <mat-error>Пароль должен содержать хотя бы один специальный символ (@$!%*?&)</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Подтвердите новый пароль</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" />
+            @if (
+              settingsForm.hasError('passwordMismatch') &&
+              settingsForm.get('confirmPassword')?.touched
+            ) {
+              <mat-error>Пароли не совпадают</mat-error>
+            }
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="settingsForm.invalid"
+            class="full-width submit-button"
+          >
+            Сохранить
+          </button>
+        </div>
+
+        <div class="avatar-section">
+          <div class="avatar-preview">
+            <app-user-avatar
+              [avatarUrl]="displayAvatarUrl"
+              [userName]="displayUserName"
+            ></app-user-avatar>
+          </div>
+          <div class="avatar-upload">
+            <input
+              type="file"
+              #avatarFileInput
+              accept="image/*"
+              (change)="onAvatarFileChange($event)"
+              class="avatar-file-input"
+            />
+            <button mat-stroked-button type="button" (click)="avatarFileInput.click()">
+              Выбрать файл
+            </button>
+            @if (avatarFile) {
+              <button mat-stroked-button type="button" (click)="clearAvatarFile()">
+                Удалить
+              </button>
+            }
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
