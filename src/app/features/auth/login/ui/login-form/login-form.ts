@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { AuthService } from '@app/features/auth/login/model/auth.service';
 import { passwordValidator } from '@shared/lib/password-validator';
 import { Router } from '@angular/router';
-
+import { UserService } from '@app/entities/user/model/user.service';
 @Component({
   selector: 'app-login-form',
   imports: [
@@ -25,6 +25,7 @@ export class LoginForm {
   protected readonly message = signal<string>('');
   private readonly router = inject(Router);
   private readonly loginService = inject(AuthService);
+  private readonly userService = inject(UserService);
 
   loginForm = new FormGroup({
     login: new FormControl('', [
@@ -51,7 +52,15 @@ export class LoginForm {
       this.loginService.login(formValue).subscribe({
         next: (response) => {
           this.message.set(response.message);
-          this.router.navigate(['/dashboard']);
+          this.router.navigateByUrl('/dashboard');
+          this.userService.me().subscribe({
+            next: () => {
+              this.router.navigateByUrl('/dashboard');
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
         },
         error: (error) => {
           this.message.set(this.loginService.getLoginErrorMessage(error));

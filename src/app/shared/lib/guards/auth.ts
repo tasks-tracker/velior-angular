@@ -15,10 +15,9 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): boolean {
     const user = this.userService.user();
-    const isLoading = this.userService.isLoading();
 
-    if (!user && !isLoading) {
-      this.router.navigate(['/login']);
+    if (!user) {
+      this.router.navigateByUrl('/login');
       return false;
     }
 

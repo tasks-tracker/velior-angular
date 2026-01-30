@@ -4,7 +4,7 @@ import {
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
@@ -25,8 +25,16 @@ export const appConfig: ApplicationConfig = {
     },
     provideAppInitializer(() => {
       const userService = inject(UserService);
-
-      userService.me();
+      const router = inject(Router);
+      userService.me().subscribe({
+        next: () => {
+          router.navigateByUrl('/dashboard');
+        },
+        error: (error) => {
+          router.navigateByUrl('/login');
+          console.error(error);
+        },
+      });
     }),
   ],
 };
