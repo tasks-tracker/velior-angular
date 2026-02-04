@@ -6,12 +6,44 @@ mat-card {
 
 mat-card-header {
   margin-bottom: 1.5rem;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 mat-card-title {
   font-size: 1.5rem;
   font-weight: 500;
+}
+
+.sign-in-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  background: linear-gradient(90deg, #eef2ff, #e0e7ff);
+  color: #3949ab;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sign-in-link:hover {
+  background: linear-gradient(90deg, #dbe4ff, #c7d2ff);
+  box-shadow: 0 6px 16px rgba(57, 73, 171, 0.18);
+}
+
+.sign-in-label {
+  opacity: 0.8;
+}
+
+.sign-in-action {
+  font-weight: 600;
 }
 
 form {
@@ -27,4 +59,16 @@ form {
 button[mat-raised-button] {
   margin-top: 0.5rem;
   height: 48px;
+}
+
+@media (max-width: 480px) {
+  mat-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sign-in-link {
+    width: 100%;
+    justify-content: center;
+  }
 }

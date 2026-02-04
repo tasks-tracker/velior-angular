@@ -5,7 +5,7 @@
       <input matInput placeholder="Найти пользователя..." formControlName="search" />
       <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
-  </form> 
+  </form>
   <div class="users-container">
     @if (isLoading) {
       <div class="message-container loading">
@@ -19,7 +19,7 @@
         <span>{{ error }}</span>
       </div>
     }
-    @if (users.length === 0 && searchForm.get('search')?.value && !isLoading ) {
+    @if (users.length === 0 && searchForm.get('search')?.value && !isLoading) {
       <div class="message-container empty">
         <mat-icon>person_off</mat-icon>
         <span>Пользователи не найдены</span>
@@ -34,7 +34,7 @@
     }
 
     @for (user of users; track user.id) {
-      <app-user [data]="user" mode="search"></app-user>
-    }    
+      <app-user [data]="user" mode="search" (userClick)="onUserClick($event)"></app-user>
+    }
   </div>
 </div>

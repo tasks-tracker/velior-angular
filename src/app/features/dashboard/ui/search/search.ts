@@ -30,13 +30,17 @@ export class Search implements OnInit, OnDestroy {
     return this.searchService.error();
   }
 
+  protected onUserClick(userId: string) {
+    console.log(userId);
+  }
+
   ngOnInit(): void {
     this.subscription = this.searchForm
       .get('search')
       ?.valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        filter((value) => !!value && value.trim().length > 0),
+        filter((value) => !!value && value.trim().length > 0)
       )
       .subscribe((query) => {
         if (query) {

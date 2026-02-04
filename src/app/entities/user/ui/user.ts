@@ -40,15 +40,16 @@ export class User {
 
   protected get avatarUrl(): string {
     if (this.mode === 'conversation') {
-      return (this.data as ConversationData).settings.avatarUrl;
+      return (this.data as ConversationData).settings.avatarUrl || '';
     }
-    return (this.data as SearchUserData).settings.avatar_url;
+    return (this.data as SearchUserData)?.settings?.avatar_url || '';
   }
 
   protected get userName(): string {
     if (this.mode === 'conversation') {
       return (this.data as ConversationData).userName;
     }
+    console.log(this.data);
     return (this.data as SearchUserData).login;
   }
 

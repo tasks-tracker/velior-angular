@@ -40,6 +40,10 @@ export class LoginForm {
     ]),
   });
 
+  onSignIn() {
+    this.router.navigateByUrl('/sign-in');
+  }
+
   onSubmit() {
     if (this.loginForm.valid) {
       this.message.set('');

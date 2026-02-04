@@ -3,7 +3,6 @@ import { inject, Injectable, signal } from '@angular/core';
 import { API_URL } from '@app/shared/config/api.config';
 import { tap, catchError, throwError, finalize } from 'rxjs';
 
-
 interface User {
   id: string;
   login: string;
@@ -12,11 +11,11 @@ interface User {
   updated_at: string;
   settings: {
     avatar_url: string;
-  }
+  };
   conversation_id: string;
 }
 interface SearchUsersResponse {
-  users: User[]
+  users: User[];
 }
 
 @Injectable({
@@ -27,17 +26,16 @@ export class SearchService {
   private readonly apiUrl = inject(API_URL);
   private readonly path = `${this.apiUrl}/auth/search-users`;
 
-  readonly users = signal<User[] | null>(null);
+  readonly users = signal<User[]>([]);
   readonly error = signal<string | null>(null);
   readonly isLoading = signal<boolean>(false);
 
   searchUsers(query: string) {
-    this.isLoading.set(true)
-    return this.http.get<SearchUsersResponse>(`${this.path}?query=${query}`)
-    .pipe(
+    this.isLoading.set(true);
+    return this.http.get<SearchUsersResponse>(`${this.path}?query=${query}`).pipe(
       tap((response) => {
         this.isLoading.set(false);
-        this.users.set(response.users)
+        this.users.set(response?.users || []);
       }),
       catchError((error) => {
         this.error.set(error.error?.message || 'Произошла ошибка при поиске пользователей');
@@ -46,6 +44,6 @@ export class SearchService {
       finalize(() => {
         this.isLoading.set(false);
       })
-    )
+    );
   }
 }

@@ -13,6 +13,7 @@ import { passwordValidator } from '@app/shared/lib/password-validator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
 
 interface ISignInForm {
   onSubmit: () => void;
@@ -31,9 +32,10 @@ export class SignInForm implements ISignInForm {
     message: string;
     error: string;
   }>({ message: '', error: '' });
+  private readonly router = inject(Router);
 
   private passwordMatchValidator: ValidatorFn = (
-    control: AbstractControl,
+    control: AbstractControl
   ): ValidationErrors | null => {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
@@ -65,7 +67,7 @@ export class SignInForm implements ISignInForm {
         Validators.maxLength(255),
       ]),
     },
-    { validators: this.passwordMatchValidator },
+    { validators: this.passwordMatchValidator }
   );
 
   onSubmit() {
@@ -81,6 +83,7 @@ export class SignInForm implements ISignInForm {
       this.authService.signIn(formValue).subscribe({
         next: (response) => {
           this.message.set({ message: response.message, error: '' });
+          this.router.navigateByUrl('/login');
         },
         error: (error) => {
           this.message.set({
