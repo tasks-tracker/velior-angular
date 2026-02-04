@@ -1,0 +1,83 @@
+.search-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.users-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  color: var(--mat-sys-on-surface);
+  font-size: 14px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: inherit;
+  }
+
+  span {
+    flex: 1;
+  }
+
+  &.loading {
+    background-color: rgba(0, 136, 204, 0.08);
+    color: #0088cc;
+
+    mat-icon {
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  &.error {
+    background-color: #f44336;
+    color: #f44336;
+  }
+
+  &.empty {
+    background-color: rgba(0, 0, 0, 0.04);
+    color: white;
+  }
+
+  &.placeholder {
+    background-color: rgba(0, 0, 0, 0.02);
+    color: white;
+    font-style: italic;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+::ng-deep .mat-mdc-form-field {
+  font-size: 14px;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  padding-bottom: 0;
+}

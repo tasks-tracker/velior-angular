@@ -1,0 +1,22 @@
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.conversations-panel {
+  width: 350px;
+  min-width: 300px;
+  max-width: 400px;
+  flex-shrink: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.chat-panel {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  min-width: 0;
+}

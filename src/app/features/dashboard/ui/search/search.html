@@ -1,0 +1,40 @@
+<div class="search-container">
+  <form [formGroup]="searchForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Поиск</mat-label>
+      <input matInput placeholder="Найти пользователя..." formControlName="search" />
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+  </form>
+  <div class="users-container">
+    @if (isLoading) {
+      <div class="message-container loading">
+        <mat-icon>hourglass_empty</mat-icon>
+        <span>Загрузка...</span>
+      </div>
+    }
+    @if (error) {
+      <div class="message-container error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error }}</span>
+      </div>
+    }
+    @if (users.length === 0 && searchForm.get('search')?.value && !isLoading) {
+      <div class="message-container empty">
+        <mat-icon>person_off</mat-icon>
+        <span>Пользователи не найдены</span>
+      </div>
+    }
+
+    @if (!searchForm.get('search')?.value && !isLoading && users.length === 0) {
+      <div class="message-container placeholder">
+        <mat-icon>person</mat-icon>
+        <span>Введите имя пользователя для поиска</span>
+      </div>
+    }
+
+    @for (user of users; track user.id) {
+      <app-user [data]="user" mode="search" (userClick)="onUserClick($event)"></app-user>
+    }
+  </div>
+</div>

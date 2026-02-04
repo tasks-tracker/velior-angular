@@ -1,0 +1,77 @@
+<mat-card>
+  <mat-card-header class="mat-card-header">
+    <mat-card-title>Вход</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Логин</mat-label>
+        <input matInput type="text" formControlName="login" placeholder="example" />
+        @if (loginForm.get('login')?.hasError('required') && loginForm.get('login')?.touched) {
+          <mat-error>Логин обязателен</mat-error>
+        }
+        @if (loginForm.get('login')?.hasError('login') && loginForm.get('login')?.touched) {
+          <mat-error>Введите корректный логин</mat-error>
+        }
+        @if (message()) {
+          <mat-error>{{ message() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Пароль</mat-label>
+        <input matInput type="password" formControlName="password" />
+        @if (
+          loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched
+        ) {
+          <mat-error>Пароль обязателен</mat-error>
+        }
+        @if (
+          loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched
+        ) {
+          <mat-error>Пароль должен быть не менее 6 символов</mat-error>
+        }
+        @if (
+          loginForm.get('password')?.hasError('passwordLowercase') &&
+          loginForm.get('password')?.touched
+        ) {
+          <mat-error>Пароль должен содержать хотя бы одну строчную букву</mat-error>
+        }
+        @if (
+          loginForm.get('password')?.hasError('passwordUppercase') &&
+          loginForm.get('password')?.touched
+        ) {
+          <mat-error>Пароль должен содержать хотя бы одну заглавную букву</mat-error>
+        }
+        @if (
+          loginForm.get('password')?.hasError('passwordDigit') && loginForm.get('password')?.touched
+        ) {
+          <mat-error>Пароль должен содержать хотя бы одну цифру</mat-error>
+        }
+        @if (
+          loginForm.get('password')?.hasError('passwordSpecial') &&
+          loginForm.get('password')?.touched
+        ) {
+          <mat-error>Пароль должен содержать хотя бы один специальный символ (@$!%*?&)</mat-error>
+        }
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="loginForm.invalid"
+        class="full-width"
+      >
+        Войти
+      </button>
+      <a (click)="onSignIn()" class="sign-in-link">
+        <span class="sign-in-label">Нет аккаунта?</span>
+        <span class="sign-in-action">Зарегистрироваться</span>
+      </a>
+      @if (message()) {
+        <mat-error>{{ message() }}</mat-error>
+      }
+    </form>
+  </mat-card-content>
+</mat-card>

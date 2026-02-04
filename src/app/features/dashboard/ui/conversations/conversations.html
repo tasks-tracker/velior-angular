@@ -1,0 +1,29 @@
+<div class="conversations-container">
+  <mat-tab-group class="conversations-tabs">
+    <mat-tab label="Беседы">
+      <mat-nav-list class="conversations-list">
+        @if (isLoading) {
+          <div>Загрузка...</div>
+        } @else if (error) {
+          <div>{{ error }}</div>
+        } @else {
+          @for (conversation of conversations; track conversation.conversationId) {
+            <app-user
+              [data]="conversation"
+              mode="conversation"
+              [isActive]="isActive(conversation.conversationId)"
+              (userClick)="getMessages($event)"
+              (conversationUser)="setConversationUser(conversation)"
+            ></app-user>
+          }
+        }
+      </mat-nav-list>
+
+      <app-user-bar></app-user-bar>
+    </mat-tab>
+
+    <mat-tab label="Поиск">
+      <app-search></app-search>
+    </mat-tab>
+  </mat-tab-group>
+</div>

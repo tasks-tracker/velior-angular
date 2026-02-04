@@ -1,0 +1,21 @@
+<div class="user-bar">
+  @if (user) {
+    <div class="user-bar-info">
+      <div matListItemAvatar>
+        <app-user-avatar
+          [avatarUrl]="user.settings?.avatar_url || ''"
+          [userName]="user.login || ''"
+        ></app-user-avatar>
+      </div>
+      <div class="user-bar-name">{{ user.login }}</div>
+    </div>
+  }
+  <div class="user-bar-actions">
+    <button mat-icon-button (click)="onSettings()" aria-label="Настройки">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <button mat-icon-button (click)="onLogout()" aria-label="Выход">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="chat-container">
+  <mat-toolbar class="chat-header">
+    @if (conversationUser) {
+      <span>{{ conversationUser.userName }}</span>
+    }
+  </mat-toolbar>
+
+  <div class="chat-messages">
+    @if (messages && messages.length > 0) {
+      @for (message of messages; track message.id) {
+        <div
+          class="message-item"
+          [class.my-message]="isMyMessage(message.senderName)"
+          [class.other-message]="!isMyMessage(message.senderName)"
+        >
+          <div class="message-content">
+            @if (!isMyMessage(message.senderName)) {
+              <div class="message-header">
+                <span class="message-sender">{{ message.senderName }}</span>
+                <span class="message-time">{{ message.createdAt | date: 'dd.MM.yyyy HH:mm' }}</span>
+              </div>
+            }
+            <div class="message-wrapper">
+              <div class="message-text">{{ message.content }}</div>
+              @if (isMyMessage(message.senderName)) {
+                <span class="message-time">{{ message.createdAt | date: 'dd.MM.yyyy HH:mm' }}</span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="message-placeholder">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <p>Выберите беседу для начала переписки</p>
+      </div>
+    }
+  </div>
+
+  @if (messages && messages.length > 0) {
+    <form class="chat-input" (ngSubmit)="$event.preventDefault()">
+      <mat-form-field appearance="outline" class="input-field">
+        <mat-label>Введите сообщение...</mat-label>
+        <input
+          matInput
+          [value]="messageValue()"
+          (keydown.enter)="handleSendMessage(); $event.preventDefault()"
+          (input)="setMessageValue($event.target.value)"
+        />
+      </mat-form-field>
+      <button mat-icon-button color="primary" class="send-button" (click)="handleSendMessage()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </form>
+  }
+</div>

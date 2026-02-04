@@ -1,0 +1,18 @@
+<mat-list-item class="user-item" [class.active]="isActive" (click)="onClick($event)">
+  <div matListItemAvatar>
+    <app-user-avatar [avatarUrl]="avatarUrl" [userName]="userName"></app-user-avatar>
+  </div>
+  <div matListItemTitle class="conversation-name">
+    {{ userName }}
+  </div>
+  @if (mode === 'conversation' && lastMessage) {
+    <div matListItemLine class="conversation-preview">
+      {{ lastMessage | cutText: 50 }}
+    </div>
+  }
+  @if (mode === 'conversation' && lastMessageAt) {
+    <div matListItemMeta class="conversation-time">
+      {{ lastMessageAt | date: 'dd.MM.yyyy HH:mm' }}
+    </div>
+  }
+</mat-list-item>
