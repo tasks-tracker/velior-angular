@@ -35,10 +35,24 @@ export class Search implements OnInit, OnDestroy {
   }
 
   protected onUserClick(userId: string) {
-    console.log(userId, this.userService.user()?.id);
-    this.conversationsService
-      .createConversation(userId, this.userService.user()?.id || '')
-      .subscribe();
+    if (
+      this.conversationsService
+        .conversations()
+        ?.every((conversation) => conversation.settings?.user_id !== userId)
+    ) {
+      this.conversationsService
+        .createConversation(userId, this.userService.user()?.id || '')
+        .subscribe({
+          next: () => {
+            this.conversationsService.getConversations().subscribe({
+              next: () =>
+                setTimeout(() => this.conversationsService.setActiveTab(0, userId)),
+            });
+          },
+        });
+    } else {
+      setTimeout(() => this.conversationsService.setActiveTab(0, userId));
+    }
   }
 
   ngOnInit(): void {

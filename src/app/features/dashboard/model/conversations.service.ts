@@ -2,15 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { API_URL } from '@app/shared/config/api.config';
 import { Observable, tap, catchError, of, throwError } from 'rxjs';
+import { UserSettings } from '@app/entities/user/model/user.service';
 
 interface Conversation {
   conversationId: string;
-  settings: {
-    avatarUrl: string;
-  };
   userName: string;
   lastMessage: string;
   lastMessageAt: string;
+  settings: UserSettings;
 }
 
 interface ConversationsResponse {
@@ -30,8 +29,16 @@ export class ConversationsService {
   readonly error = signal<string | null>(null);
   readonly isLoading = signal<boolean>(false);
 
+  readonly activeTab = signal<number>(0);
+  readonly targetUserId = signal<string | null>(null);
+
   createConversation(userId: string, partnerId: string) {
     return this.http.post(`${this.path}/create`, { user1Id: partnerId, user2Id: userId });
+  }
+
+  setActiveTab(tab: number, userId?: string) {
+    this.activeTab.set(tab);
+    this.targetUserId.set(userId ?? null);
   }
 
   getConversations(): Observable<ConversationsResponse> {

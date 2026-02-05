@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { ConversationData, User } from '@app/entities/user/ui/user';
+import { ConversationData } from '../ui/conversations/conversation-user/conversation-user';
 import { API_URL } from '@app/shared/config/api.config';
 import { tap, catchError, throwError, finalize } from 'rxjs';
 

@@ -1,17 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { Search } from '../search/search';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { ConversationsService } from '../../model/conversations.service';
-import { ConversationData, User } from '@app/entities/user/ui/user';
+import { ConversationData } from './conversation-user/conversation-user';
+import { ConversationUser } from './conversation-user/conversation-user';
 import { ChatService } from '../../model/chat.service';
 import { SocketService } from '../../model/socket.service';
 import { UserBar } from '../user-bar/user-bar';
 
 @Component({
   selector: 'app-conversations',
-  imports: [Search, MatListModule, User, MatTabsModule, CommonModule, UserBar],
+  imports: [Search, MatListModule, ConversationUser, MatTabsModule, CommonModule, UserBar],
   templateUrl: './conversations.html',
   standalone: true,
   styleUrl: './conversations.scss',
@@ -20,6 +21,21 @@ export class Conversations implements OnInit {
   protected readonly conversationsService = inject(ConversationsService);
   protected readonly chatService = inject(ChatService);
   private readonly socketService = inject(SocketService);
+
+  constructor() {
+    effect(() => {
+      const targetUserId = this.conversationsService.targetUserId();
+      const conversations = this.conversationsService.conversations();
+      if (targetUserId && conversations.length > 0) {
+        const conversation = conversations.find((c) => c.settings?.user_id === targetUserId);
+        if (conversation) {
+          this.setConversationUser(conversation as ConversationData);
+          this.getMessages(conversation.conversationId);
+          this.conversationsService.targetUserId.set(null);
+        }
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.conversationsService.getConversations().subscribe();
@@ -41,6 +57,10 @@ export class Conversations implements OnInit {
 
   protected get conversations() {
     return this.conversationsService.conversations();
+  }
+
+  protected get activeTab() {
+    return this.conversationsService.activeTab();
   }
 
   protected isActive(conversationId: string): boolean {

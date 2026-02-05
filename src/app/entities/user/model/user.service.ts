@@ -3,13 +3,19 @@ import { inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { API_URL } from '@app/shared/config/api.config';
 import { catchError, finalize, Observable, Subscription, tap, throwError } from 'rxjs';
 
+export interface UserSettings {
+  avatar_url: string;
+  language: string;
+  notification_sound: boolean;
+  theme: string;
+  user_id: string;
+}
+
 export interface User {
   id: string;
   login: string;
   registeredAt: string;
-  settings: {
-    avatar_url: string;
-  };
+  settings: UserSettings;
 }
 
 @Injectable({

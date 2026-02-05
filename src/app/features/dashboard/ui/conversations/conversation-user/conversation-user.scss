@@ -1,0 +1,39 @@
+.user-item {
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 0px !important;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  &.active {
+    background-color: rgba(0, 136, 204, 0.1);
+  }
+}
+
+.conversation-name {
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.conversation-preview {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-time {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+::ng-deep .mat-mdc-list-item {
+  height: auto;
+  min-height: 72px;
+}
+
+::ng-deep .mat-mdc-list-item-content {
+  align-items: center;
+}
