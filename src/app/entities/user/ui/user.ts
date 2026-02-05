@@ -49,7 +49,6 @@ export class User {
     if (this.mode === 'conversation') {
       return (this.data as ConversationData).userName;
     }
-    console.log(this.data);
     return (this.data as SearchUserData).login;
   }
 

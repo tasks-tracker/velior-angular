@@ -6,6 +6,8 @@
           <div>Загрузка...</div>
         } @else if (error) {
           <div>{{ error }}</div>
+        } @else if (conversations.length === 0) {
+          <div>Нет бесед. Начните переписку с пользователем</div>
         } @else {
           @for (conversation of conversations; track conversation.conversationId) {
             <app-user
