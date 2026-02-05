@@ -34,7 +34,7 @@
     }
 
     @for (user of users; track user.id) {
-      <app-user [data]="user" mode="search" (userClick)="onUserClick($event)"></app-user>
+      <app-user [data]="user" (userClick)="onUserClick($event)"></app-user>
     }
   </div>
 </div>

@@ -1,5 +1,9 @@
 <div class="conversations-container">
-  <mat-tab-group class="conversations-tabs">
+  <mat-tab-group
+    class="conversations-tabs"
+    [selectedIndex]="activeTab"
+    (selectedIndexChange)="conversationsService.setActiveTab($event)"
+  >
     <mat-tab label="Беседы">
       <mat-nav-list class="conversations-list">
         @if (isLoading) {
@@ -10,13 +14,12 @@
           <div>Нет бесед. Начните переписку с пользователем</div>
         } @else {
           @for (conversation of conversations; track conversation.conversationId) {
-            <app-user
+            <app-conversation-user
               [data]="conversation"
-              mode="conversation"
               [isActive]="isActive(conversation.conversationId)"
               (userClick)="getMessages($event)"
               (conversationUser)="setConversationUser(conversation)"
-            ></app-user>
+            ></app-conversation-user>
           }
         }
       </mat-nav-list>

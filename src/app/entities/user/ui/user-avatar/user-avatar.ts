@@ -1,7 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { User } from '../../model/user.service';
 import { GetInitialsPipe } from '@app/shared/lib/pipes/get-initials-pipe';
-import { ConversationData, SearchUserData } from '../user';
 
 @Component({
   selector: 'app-user-avatar',
