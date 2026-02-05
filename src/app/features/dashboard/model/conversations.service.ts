@@ -30,6 +30,10 @@ export class ConversationsService {
   readonly error = signal<string | null>(null);
   readonly isLoading = signal<boolean>(false);
 
+  createConversation(userId: string, partnerId: string) {
+    return this.http.post(`${this.path}/create`, { user1Id: partnerId, user2Id: userId });
+  }
+
   getConversations(): Observable<ConversationsResponse> {
     this.isLoading.set(true);
     return this.http.get<ConversationsResponse>(`${this.path}/get-user-conversations`).pipe(
@@ -41,7 +45,7 @@ export class ConversationsService {
         this.error.set(error.error?.message || 'Произошла ошибка при получении списка бесед');
         this.isLoading.set(false);
         return throwError(() => error);
-      }),
+      })
     );
   }
 }

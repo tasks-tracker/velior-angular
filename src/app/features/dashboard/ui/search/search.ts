@@ -6,6 +6,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SearchService } from '../../model/search.service';
 import { debounceTime, distinctUntilChanged, filter, Subscription } from 'rxjs';
 import { User } from '@app/entities/user/ui/user';
+import { ConversationsService } from '../../model/conversations.service';
+import { UserService } from '@app/entities/user/model/user.service';
 
 @Component({
   selector: 'app-search',
@@ -16,6 +18,8 @@ import { User } from '@app/entities/user/ui/user';
 })
 export class Search implements OnInit, OnDestroy {
   private readonly searchService = inject(SearchService);
+  private readonly conversationsService = inject(ConversationsService);
+  private readonly userService = inject(UserService);
   private subscription?: Subscription;
 
   protected searchForm = new FormGroup({
@@ -31,7 +35,10 @@ export class Search implements OnInit, OnDestroy {
   }
 
   protected onUserClick(userId: string) {
-    console.log(userId);
+    console.log(userId, this.userService.user()?.id);
+    this.conversationsService
+      .createConversation(userId, this.userService.user()?.id || '')
+      .subscribe();
   }
 
   ngOnInit(): void {

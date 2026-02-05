@@ -37,20 +37,18 @@
     }
   </div>
 
-  @if (messages && messages.length > 0) {
-    <form class="chat-input" (ngSubmit)="$event.preventDefault()">
-      <mat-form-field appearance="outline" class="input-field">
-        <mat-label>Введите сообщение...</mat-label>
-        <input
-          matInput
-          [value]="messageValue()"
-          (keydown.enter)="handleSendMessage(); $event.preventDefault()"
-          (input)="setMessageValue($event.target.value)"
-        />
-      </mat-form-field>
-      <button mat-icon-button color="primary" class="send-button" (click)="handleSendMessage()">
-        <mat-icon>send</mat-icon>
-      </button>
-    </form>
-  }
+  <form class="chat-input" (ngSubmit)="$event.preventDefault()">
+    <mat-form-field appearance="outline" class="input-field">
+      <mat-label>Введите сообщение...</mat-label>
+      <input
+        matInput
+        [value]="messageValue()"
+        (keydown.enter)="handleSendMessage(); $event.preventDefault()"
+        (input)="setMessageValue($event.target.value)"
+      />
+    </mat-form-field>
+    <button mat-icon-button color="primary" class="send-button" (click)="handleSendMessage()">
+      <mat-icon>send</mat-icon>
+    </button>
+  </form>
 </div>
