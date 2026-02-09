@@ -7,28 +7,19 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { MessageInput } from './message-input/message-input';
 import { ChatService } from '../../model/chat.service';
 import { UserService } from '@app/entities/user/model/user.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SocketService } from '../../model/socket.service';
+import { ConversationsService } from '../../model/conversations.service';
 
 @Component({
   selector: 'app-chat',
-  imports: [
-    MatToolbarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    CommonModule,
-    ReactiveFormsModule,
-  ],
+  imports: [MatToolbarModule, MatIconModule, CommonModule, ReactiveFormsModule, MessageInput],
   templateUrl: './chat.html',
   standalone: true,
   styleUrl: './chat.scss',
