@@ -24,7 +24,9 @@
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" placeholder="example@mail.com" />
-            @if (settingsForm.get('email')?.hasError('email') && settingsForm.get('email')?.touched) {
+            @if (
+              settingsForm.get('email')?.hasError('email') && settingsForm.get('email')?.touched
+            ) {
               <mat-error>Введите корректный email</mat-error>
             }
           </mat-form-field>
@@ -66,7 +68,9 @@
               settingsForm.get('password')?.hasError('passwordSpecial') &&
               settingsForm.get('password')?.touched
             ) {
-              <mat-error>Пароль должен содержать хотя бы один специальный символ (@$!%*?&)</mat-error>
+              <mat-error
+                >Пароль должен содержать хотя бы один специальный символ (@$!%*?&)</mat-error
+              >
             }
           </mat-form-field>
 
@@ -80,6 +84,16 @@
               <mat-error>Пароли не совпадают</mat-error>
             }
           </mat-form-field>
+
+          @if (settingsService.isLoading()) {
+            <div class="loading-message">Загрузка...</div>
+          } @else if (settingsService.error()) {
+            <div class="error-message">
+              {{ settingsService.error()?.message ?? 'Ошибка сохранения' }}
+            </div>
+          } @else if (settingsService.message()) {
+            <div class="success-message">{{ settingsService.message() }}</div>
+          }
 
           <button
             mat-raised-button
@@ -111,9 +125,7 @@
               Выбрать файл
             </button>
             @if (avatarFile) {
-              <button mat-stroked-button type="button" (click)="clearAvatarFile()">
-                Удалить
-              </button>
+              <button mat-stroked-button type="button" (click)="clearAvatarFile()">Удалить</button>
             }
           </div>
         </div>

@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     {
       provide: API_URL,
-      useValue: 'http://localhost:8000',
+      useValue: '/api',
     },
     provideAppInitializer(() => {
       const userService = inject(UserService);
