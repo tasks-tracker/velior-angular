@@ -61,6 +61,36 @@ mat-card-title {
   gap: 1rem;
 }
 
+.loading-message {
+  padding: 12px 16px;
+  margin: 0;
+  font-size: 14px;
+  color: #1565c0;
+  background-color: rgba(21, 101, 192, 0.08);
+  border-radius: 4px;
+  border-left: 4px solid #1565c0;
+}
+
+.error-message {
+  padding: 12px 16px;
+  margin: 0;
+  font-size: 14px;
+  color: #b71c1c;
+  background-color: rgba(183, 28, 28, 0.08);
+  border-radius: 4px;
+  border-left: 4px solid #b71c1c;
+}
+
+.success-message {
+  padding: 12px 16px;
+  margin: 0;
+  font-size: 14px;
+  color: #2e7d32;
+  background-color: rgba(46, 125, 50, 0.08);
+  border-radius: 4px;
+  border-left: 4px solid #2e7d32;
+}
+
 .avatar-section {
   flex-shrink: 0;
   width: 220px;

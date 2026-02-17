@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '@app/entities/user/model/user.service';
 import { passwordValidator } from '@app/shared/lib/password-validator';
 import { UserAvatar } from '@app/entities/user/ui/user-avatar/user-avatar';
+import { SettingsService } from '../model/settings';
 
 @Component({
   selector: 'app-settings',
@@ -31,6 +32,7 @@ import { UserAvatar } from '@app/entities/user/ui/user-avatar/user-avatar';
 })
 export class Settings implements OnInit, OnDestroy {
   private readonly userService = inject(UserService);
+  protected readonly settingsService = inject(SettingsService);
 
   protected avatarPreviewUrl: string | null = null;
   protected avatarFile: File | null = null;
@@ -73,13 +75,10 @@ export class Settings implements OnInit, OnDestroy {
         Validators.maxLength(255),
       ]),
       email: new FormControl('', [Validators.email]),
-      password: new FormControl('', [
-        Validators.minLength(6),
-        passwordValidator(),
-      ]),
+      password: new FormControl('', [Validators.minLength(6), passwordValidator()]),
       confirmPassword: new FormControl(''),
     },
-    { validators: this.passwordMatchValidator }
+    { validators: this.passwordMatchValidator },
   );
 
   ngOnInit(): void {
@@ -104,8 +103,13 @@ export class Settings implements OnInit, OnDestroy {
   protected onSubmit(): void {
     if (this.settingsForm.valid) {
       const value = this.settingsForm.getRawValue();
-      // TODO: вызов API обновления профиля (avatarFile — загруженный файл, если выбран)
-      console.log('Settings submit', { ...value, avatarFile: this.avatarFile });
+      const payload = {
+        login: value.login ?? undefined,
+        email: value.email || undefined,
+        password: value.password || undefined,
+      };
+
+      this.settingsService.updateSettings(payload);
     } else {
       this.markFormFieldsAsTouched();
     }
